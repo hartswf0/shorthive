@@ -24,20 +24,20 @@
         }
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             background: #fff;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
         /* Headings */
         h1, h2 {
             font-family: 'Impact', sans-serif;
             color: #FFC107; /* Honey Yellow */
             text-transform: uppercase;
-            margin-bottom: 15px;
             letter-spacing: 0.5px; /* Reduced spacing for a more elegant feel */
             text-align: center;
         }
@@ -51,7 +51,6 @@
             background-color: rgba(255, 207, 64, 0.1); /* Light Honey Yellow */
             padding: 10px 20px;
             position: relative;
-            margin-top: 20px;
             border-radius: 5px;
         }
         h2::before {
@@ -100,7 +99,6 @@
         #chat-container {
             border: 2px solid #E0E0E0; /* Softer borders for a clean look */
             border-radius: 8px;
-            margin-bottom: 15px;
             padding: 15px;
             flex-grow: 1;
             display: flex;
@@ -125,32 +123,19 @@
             max-width: 80%;
             word-wrap: break-word;
             position: relative;
+            font-size: 14px;
         }
         .message.user {
             background: #EAEAEA; /* Neutral color for user messages */
             align-self: flex-end;
             color: #333;
+            border-right: 5px solid #3498db; /* Blue accent */
         }
         .message.ai {
             background: #FFF4E5; /* Light honeycomb color for AI messages */
             align-self: flex-start;
             color: #333;
-        }
-        .message::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-        }
-        .message.user::after {
-            right: -20px;
-            border-left-color: #EAEAEA;
-        }
-        .message.ai::after {
-            left: -20px;
-            border-right-color: #FFF4E5;
+            border-left: 5px solid #FFC107; /* Honey Yellow accent */
         }
         /* User Input */
         #user-input {
@@ -159,16 +144,6 @@
         }
         #user-input input {
             flex-grow: 1;
-            padding: 12px 15px;
-            border: 1px solid #d4c4a8;
-            border-radius: 8px;
-            font-size: 16px;
-            background-color: #fff;
-            transition: border-color 0.3s ease;
-        }
-        #user-input input:focus {
-            border-color: #FFC107;
-            outline: none;
         }
         /* Console Output */
         #console-output {
@@ -183,6 +158,7 @@
             border-radius: 8px;
             position: relative;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+            font-size: 14px;
         }
         /* Copy Buttons */
         .copy-button {
@@ -203,7 +179,6 @@
         }
         /* System Prompt Details */
         #prompt-details {
-            margin-top: 20px;
             padding: 15px;
             background-color: #f9f9f9;
             border: 1px solid #d4c4a8;
@@ -216,10 +191,10 @@
         }
         #prompt-details p {
             margin-bottom: 10px;
+            font-size: 14px;
         }
         /* Usage Stats */
         #usage-stats {
-            margin-top: 20px;
             padding: 15px;
             background-color: #f0f8ff;
             border: 1px solid #d4c4a8;
@@ -233,7 +208,7 @@
         }
         #usage-stats p {
             margin-bottom: 10px;
-            font-size: 16px;
+            font-size: 14px;
         }
         #usage-stats button {
             background-color: #e74c3c; /* Red for reset */
@@ -339,7 +314,7 @@
     </div>
 
     <script>
-        // Existing DOM Elements
+        // DOM Elements
         const chatMessages = document.getElementById('chat-messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -418,7 +393,103 @@ You will edit purely text.
 Don't write any other textual thing than the text itself.
 Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
             },
-            // ... [Other templates remain unchanged]
+            {
+                name: "Expert Video Writer",
+                inputEntity: "Video Description",
+                outputEntity: "Video Script",
+                morphism: "{Video Description} --[Generates]--> {Video Script}",
+                systemPrompt: `You are an expert video writer. You ONLY produce text that is read. You only produce the script that will be read by a voice actor for a video. The user will give you the description of the video they want you to make and from that, you will write the script. Make sure to directly write the script in response to the video description.
+Your script will not have any reference to the audio footage/video footage shown. Only the text that will be narrated by the voice actor.
+You will produce purely text.
+Don't write any other textual thing than the text itself.
+Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
+            },
+            {
+                name: "Shorts Video Editor",
+                inputEntity: "Transcript",
+                outputEntity: "Image Queries",
+                morphism: "{Transcript} --[Generates]--> {Image Queries}",
+                systemPrompt: `You are a shorts video editor. Your audience is people from 18 yo to 40yo. Your style of editing is pretty simple, you take the transcript of your short and put a very simple google image to illustrate the narrated sentences.
+...
+NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN THE QUERIES.`
+            },
+            {
+                name: "Video Research Expert",
+                inputEntity: "Timed Captions",
+                outputEntity: "Video Search Queries",
+                morphism: "{Timed Captions} --[Generates]--> {Video Search Queries}",
+                systemPrompt: `You're a video research expert. The user will give you the timed captions of a video they will make, and you will give back a list of text search queries that will be used to search for background video footage.`
+            },
+            {
+                name: "Facts Content Writer",
+                inputEntity: "Facts Type",
+                outputEntity: "Captivating Script",
+                morphism: "{Facts Type} --[Generates]--> {Captivating Script}",
+                systemPrompt: `You are an expert content writer of a YouTube shorts channel. You specialize in 'facts' shorts. Your facts shorts are less than 50 seconds verbally (around 140 words maximum). They are extremely captivating and original.`
+            },
+            {
+                name: "Random Subject Generator",
+                inputEntity: "Series Request",
+                outputEntity: "Subjects Array",
+                morphism: "{Series Request} --[Generates]--> {Subjects Array}",
+                systemPrompt: `For a series of <<N>> YouTube videos about top 10 facts on a certain subject, pick a random subject. Be very original. Put it in the '<<Subject>> facts' format.`
+            },
+            {
+                name: "Reddit Ask Question Extractor",
+                inputEntity: "Reddit Transcript",
+                outputEntity: "Thread Question",
+                morphism: "{Reddit Transcript} --[Extracts]--> {Thread Question}",
+                systemPrompt: `From the transcript of a Reddit ask, tell me the question in the title. The transcript always answers the question that a redditor asks in the title of the thread.`
+            },
+            {
+                name: "Story Realism Judge",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score}",
+                systemPrompt: `You are the judge of the story. Your goal will be to judge if it can possibly happen. If it's possible and the story makes sense, then it's a 10. If not, it's a 0.`
+            },
+            {
+                name: "Reddit Ask Thread Question Generator",
+                inputEntity: "User Input",
+                outputEntity: "Interesting Question",
+                morphism: "{User Input} --[Generates]--> {Interesting Question}",
+                systemPrompt: `You will write an interesting Reddit ask thread question. The question must be a short, open-ended question that requires opinion/anecdotal-based answers.`
+            },
+            {
+                name: "YouTube Shorts Content Creator",
+                inputEntity: "Reddit Question",
+                outputEntity: "Anecdote Script",
+                morphism: "{Reddit Question} --[Generates]--> {Anecdote Script}",
+                systemPrompt: `You are a YouTube shorts content creator. You make extremely captivating shorts based on answers from AskReddit. Create a highly engaging anecdote for a YouTube short.`
+            },
+            {
+                name: "Realism Filter for YouTube Shorts Story",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score and Explanation",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score and Explanation}",
+                systemPrompt: `You're a judge of the realisticness of a story for a YouTube short. Determine if it can possibly happen and provide a score.`
+            },
+            {
+                name: "Reddit Username Generator",
+                inputEntity: "User Request",
+                outputEntity: "Random Reddit Username",
+                morphism: "{User Request} --[Generates]--> {Random Reddit Username}",
+                systemPrompt: `Generate a random Reddit name with one or two numbers inside the name. Make it sound natural.`
+            },
+            {
+                name: "Content Translator",
+                inputEntity: "Content Input",
+                outputEntity: "Translated Content in Target Language",
+                morphism: "{Content Input} --[Translates]--> {Translated Content in Target Language}",
+                systemPrompt: `You're an expert content translator to <<LANGUAGE>>. You always translate sentences properly, and you write numbers in WORDS, not digits.`
+            },
+            {
+                name: "Narrator Gender Identifier",
+                inputEntity: "Narrated Transcript",
+                outputEntity: "Narrator Gender",
+                morphism: "{Narrated Transcript} --[Identifies]--> {Narrator Gender}",
+                systemPrompt: `I will give you a narrated transcript, and you must identify if it's most probably a male or female.`
+            },
             {
                 name: "YouTube Shorts Title and Description Generator",
                 inputEntity: "Short Transcript",
@@ -496,7 +567,9 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 return;
             }
 
-            const systemPrompt = templates[selectedPromptIndex].systemPrompt;
+            const selectedTemplate = templates[selectedPromptIndex];
+            const systemPrompt = selectedTemplate.systemPrompt;
+            const aiName = selectedTemplate.name;
 
             addMessageToChat('User', message);
             messageInput.value = '';
@@ -537,7 +610,7 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 const data = await response.json();
                 const aiResponse = data.choices[0].message.content.trim();
                 log('Received response from OpenAI API');
-                addMessageToChat('AI', aiResponse);
+                addMessageToChat(aiName, aiResponse);
 
                 // Estimate tokens for output
                 let outputTokens = estimateTokens(aiResponse);
@@ -557,20 +630,13 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 conversationHistory.push({ role: "assistant", content: aiResponse });
             } catch (error) {
                 log(`Error: ${error.message}`);
-                addMessageToChat('AI', 'Sorry, there was an error processing your request.');
+                addMessageToChat(aiName, 'Sorry, there was an error processing your request.');
             }
         }
 
         function addMessageToChat(sender, message) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender.toLowerCase());
-
-            // Color Coding for System Prompts
-            if (sender === 'AI') {
-                messageElement.style.borderLeft = '5px solid #FFC107'; // Honey Yellow accent
-            } else if (sender === 'User') {
-                messageElement.style.borderRight = '5px solid #3498db'; // Blue accent
-            }
 
             messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
             chatMessages.appendChild(messageElement);
