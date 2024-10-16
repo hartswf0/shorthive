@@ -24,20 +24,20 @@
         }
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 900px; /* Increased max-width for better content distribution */
             background: #fff;
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
+            gap: 20px;
         }
         /* Headings */
         h1, h2 {
             font-family: 'Impact', sans-serif;
             color: #FFC107; /* Honey Yellow */
             text-transform: uppercase;
-            margin-bottom: 15px;
             letter-spacing: 0.5px; /* Reduced spacing for a more elegant feel */
             text-align: center;
         }
@@ -51,7 +51,6 @@
             background-color: rgba(255, 207, 64, 0.1); /* Light Honey Yellow */
             padding: 10px 20px;
             position: relative;
-            margin-top: 20px;
             border-radius: 5px;
         }
         h2::before {
@@ -60,6 +59,14 @@
             left: -35px;
             top: 50%;
             transform: translateY(-50%);
+        }
+        /* Logline */
+        .logline {
+            text-align: center;
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 20px;
+            padding: 0 10px;
         }
         /* Input Fields and Buttons */
         input[type="password"],
@@ -100,7 +107,6 @@
         #chat-container {
             border: 2px solid #E0E0E0; /* Softer borders for a clean look */
             border-radius: 8px;
-            margin-bottom: 15px;
             padding: 15px;
             flex-grow: 1;
             display: flex;
@@ -125,32 +131,28 @@
             max-width: 80%;
             word-wrap: break-word;
             position: relative;
+            font-size: 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
         .message.user {
             background: #EAEAEA; /* Neutral color for user messages */
             align-self: flex-end;
             color: #333;
+            border-top-right-radius: 0;
+            border-right: 5px solid #3498db; /* Blue accent for user */
         }
         .message.ai {
             background: #FFF4E5; /* Light honeycomb color for AI messages */
             align-self: flex-start;
             color: #333;
+            border-top-left-radius: 0;
+            border-left: 5px solid #FFC107; /* Honey Yellow accent */
         }
-        .message::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border: 10px solid transparent;
-        }
-        .message.user::after {
-            right: -20px;
-            border-left-color: #EAEAEA;
-        }
-        .message.ai::after {
-            left: -20px;
-            border-right-color: #FFF4E5;
+        /* Agent Icon */
+        .agent-icon {
+            font-size: 20px;
         }
         /* User Input */
         #user-input {
@@ -170,36 +172,62 @@
             border-color: #FFC107;
             outline: none;
         }
+        /* Dashboard */
+        #dashboard {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
         /* Console Output */
         #console-output {
             background-color: #F0F0F0;
             border: 2px solid #ccc;
             padding: 10px;
-            margin-top: 20px;
+            flex: 1;
+            min-width: 250px;
             font-family: 'Fira Code', monospace;
-            white-space: pre-wrap;
-            height: 100px;
+            white-space: pre-wrap; /* Allow wrapping */
+            word-wrap: break-word; /* Break long words */
+            max-height: 200px;
             overflow-y: auto;
             border-radius: 8px;
-            position: relative;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+            font-size: 14px;
+        }
+        /* Usage Stats */
+        #usage-stats {
+            background-color: #f0f8ff;
+            border: 1px solid #d4c4a8;
+            padding: 15px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 250px;
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
         }
-        /* Copy Buttons */
-        .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #3498db;
+        #usage-stats h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        #usage-stats p {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        #usage-stats button {
+            background-color: #e74c3c; /* Red for reset */
             color: #fff;
             border: none;
-            padding: 5px 8px;
+            padding: 8px 12px;
             cursor: pointer;
-            border-radius: 3px;
-            font-size: 12px;
+            border-radius: 5px;
+            font-size: 14px;
             transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
         }
-        .copy-button:hover {
-            background-color: #2980b9;
+        #usage-stats button:hover {
+            background-color: #c0392b;
         }
         /* System Prompt Details */
         #prompt-details {
@@ -217,26 +245,8 @@
         #prompt-details p {
             margin-bottom: 10px;
         }
-        /* Usage Stats */
-        #usage-stats {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f0f8ff;
-            border: 1px solid #d4c4a8;
-            border-radius: 8px;
-        }
-        #usage-stats h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            text-align: center;
-        }
-        #usage-stats p {
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        #usage-stats button {
-            background-color: #e74c3c; /* Red for reset */
+        #view-prompt-button {
+            background-color: #3498db; /* Blue for viewing prompt */
             color: #fff;
             border: none;
             padding: 8px 12px;
@@ -244,11 +254,21 @@
             border-radius: 5px;
             font-size: 14px;
             transition: background-color 0.3s ease;
-            display: block;
-            margin: 0 auto;
+            margin-top: 10px;
         }
-        #usage-stats button:hover {
-            background-color: #c0392b;
+        #view-prompt-button:hover {
+            background-color: #2980b9;
+        }
+        #system-prompt-code {
+            display: none;
+            background-color: #2d2d2d;
+            color: #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            overflow-x: auto;
+            white-space: pre-wrap; /* Allow wrapping */
+            word-wrap: break-word; /* Break long words */
         }
         /* About Section */
         .about {
@@ -276,7 +296,10 @@
                 font-size: 14px;
             }
             #console-output {
-                height: 80px;
+                max-height: 150px;
+            }
+            #dashboard {
+                flex-direction: column;
             }
         }
     </style>
@@ -286,6 +309,25 @@
 <body>
     <div class="container">
         <h1>ShortHive</h1>
+        <!-- Logline -->
+        <div class="logline">
+            Automate Your AI Video Workflow with ShortHive.
+        </div>
+        <!-- About Section (How It Works) -->
+        <div class="about">
+            <h2>How It Works</h2>
+            <p>This chatbot allows you to select different system prompts to interact with. Follow these steps:</p>
+            <ul>
+                <li><strong>Enter API Key:</strong> Provide your OpenAI API key in the input field above.</li>
+                <li><strong>Test API Key:</strong> Click "Test API Key" to verify its validity.</li>
+                <li><strong>Select System Prompt:</strong> Choose a desired system prompt from the dropdown menu.</li>
+                <li><strong>Start Chatting:</strong> Type your message and click "Send" or press Enter to communicate with the AI.</li>
+                <li><strong>View Prompt Details:</strong> See the expected input and output entities along with their relationship.</li>
+                <li><strong>View System Prompt:</strong> Click "View System Prompt" to see the full system prompt in a code block.</li>
+            </ul>
+            <p>Your API key is never stored or shared. It's used solely for making requests to the OpenAI API.</p>
+            <p>Check out our repository on <a href="https://github.com/hartswf0/shorthive" target="_blank">GitHub</a> for more details.</p>
+        </div>
         <!-- API Key Input -->
         <input type="password" id="api-key-input" placeholder="Enter your OpenAI API key">
         <button id="test-api-key">Test API Key</button>
@@ -299,11 +341,12 @@
             <p><strong>Input Entity:</strong> <span id="input-entity">N/A</span></p>
             <p><strong>Output Entity:</strong> <span id="output-entity">N/A</span></p>
             <p><strong>Morphism:</strong> <span id="morphism">N/A</span></p>
+            <button id="view-prompt-button">View System Prompt</button>
+            <pre id="system-prompt-code"></pre>
         </div>
         <!-- Chat Container -->
         <div id="chat-container">
             <div id="chat-messages">
-                <button class="copy-button" id="copy-chat">Copy</button>
                 <!-- Chat messages will appear here -->
             </div>
             <div id="user-input">
@@ -313,7 +356,8 @@
         </div>
         <!-- Console Output -->
         <div id="console-output">
-            <button class="copy-button" id="copy-console">Copy</button>
+            <p><strong>Console Output:</strong></p>
+            <pre id="console-log"></pre>
         </div>
         <!-- API Usage Statistics -->
         <div id="usage-stats">
@@ -322,42 +366,25 @@
             <p><strong>Estimated Cost:</strong> $<span id="estimated-cost">0.0000</span></p>
             <button id="reset-usage">Reset Usage</button>
         </div>
-        <!-- About Section -->
-        <div class="about">
-            <h2>How It Works</h2>
-            <p>This chatbot allows you to select different system prompts to interact with. Follow these steps:</p>
-            <ul>
-                <li><strong>Enter API Key:</strong> Provide your OpenAI API key in the input field above.</li>
-                <li><strong>Test API Key:</strong> Click "Test API Key" to verify its validity.</li>
-                <li><strong>Select System Prompt:</strong> Choose a desired system prompt from the dropdown menu.</li>
-                <li><strong>Start Chatting:</strong> Type your message and click "Send" or press Enter to communicate with the AI.</li>
-                <li><strong>View Prompt Details:</strong> See the expected input and output entities along with their relationship.</li>
-                <li><strong>Copy Output:</strong> Use the "Copy" buttons to copy chat messages or console logs.</li>
-            </ul>
-            <p>Your API key is never stored or shared. It's used solely for making requests to the OpenAI API.</p>
-        </div>
     </div>
 
     <script>
-        // Existing DOM Elements
+        // DOM Elements
         const chatMessages = document.getElementById('chat-messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
         const apiKeyInput = document.getElementById('api-key-input');
         const testApiKeyButton = document.getElementById('test-api-key');
-        const consoleOutput = document.getElementById('console-output');
-        const copyConsoleButton = document.getElementById('copy-console');
-        const copyChatButton = document.getElementById('copy-chat');
+        const consoleLog = document.getElementById('console-log');
         const systemPromptSelect = document.getElementById('system-prompt-select');
         const inputEntitySpan = document.getElementById('input-entity');
         const outputEntitySpan = document.getElementById('output-entity');
         const morphismSpan = document.getElementById('morphism');
-        const promptDetails = document.getElementById('prompt-details');
-
-        // New DOM Elements for Usage Stats
+        const resetUsageButton = document.getElementById('reset-usage');
         const totalTokensSpan = document.getElementById('total-tokens');
         const estimatedCostSpan = document.getElementById('estimated-cost');
-        const resetUsageButton = document.getElementById('reset-usage');
+        const viewPromptButton = document.getElementById('view-prompt-button');
+        const systemPromptCode = document.getElementById('system-prompt-code');
 
         // Pricing Configuration
         const pricing = {
@@ -375,35 +402,24 @@
         let totalTokens = 0;
         let totalCost = 0;
 
-        // Utility Function to Estimate Tokens
-        function estimateTokens(text) {
-            // Simple heuristic: 1 token ≈ 4 characters
-            return Math.ceil(text.length / 4);
-            // For more accurate token counts, consider integrating a tokenizer library
-            // Example with gpt-3-encoder:
-            // return gpt3Encoder.encode(text).length;
-        }
-
-        // Function to Update Usage Stats Display
-        function updateUsageDisplay() {
-            totalTokensSpan.textContent = totalTokens;
-            estimatedCostSpan.textContent = totalCost.toFixed(4);
-        }
-
-        // Function to Reset Usage Stats
-        function resetUsage() {
-            totalTokens = 0;
-            totalCost = 0;
-            updateUsageDisplay();
-            alert('Usage statistics have been reset.');
-        }
-
-        // Event Listener for Reset Button
-        resetUsageButton.addEventListener('click', () => {
-            if (confirm('Are you sure you want to reset usage statistics?')) {
-                resetUsage();
-            }
-        });
+        // Mapping of AI Agents to Emojis and Colors
+        const agentStyles = {
+            "Expert Video Script Writer": { emoji: "✍️", color: "#FFC107" },
+            "Expert Video Writer": { emoji: "📝", color: "#8E44AD" },
+            "Shorts Video Editor": { emoji: "🎬", color: "#2ECC71" },
+            "Video Research Expert": { emoji: "🔍", color: "#3498DB" },
+            "Facts Content Writer": { emoji: "📊", color: "#E67E22" },
+            "Random Subject Generator": { emoji: "🎲", color: "#1ABC9C" },
+            "Reddit Ask Question Extractor": { emoji: "❓", color: "#9B59B6" },
+            "Story Realism Judge": { emoji: "⚖️", color: "#34495E" },
+            "Reddit Ask Thread Question Generator": { emoji: "💬", color: "#E74C3C" },
+            "YouTube Shorts Content Creator": { emoji: "📹", color: "#16A085" },
+            "Realism Filter for YouTube Shorts Story": { emoji: "🧐", color: "#F39C12" },
+            "Reddit Username Generator": { emoji: "👤", color: "#D35400" },
+            "Content Translator": { emoji: "🌐", color: "#7F8C8D" },
+            "Narrator Gender Identifier": { emoji: "🔠", color: "#2C3E50" },
+            "YouTube Shorts Title and Description Generator": { emoji: "🏷️", color: "#BDC3C7" }
+        };
 
         // Templates Array
         const templates = [
@@ -418,7 +434,103 @@ You will edit purely text.
 Don't write any other textual thing than the text itself.
 Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
             },
-            // ... [Other templates remain unchanged]
+            {
+                name: "Expert Video Writer",
+                inputEntity: "Video Description",
+                outputEntity: "Video Script",
+                morphism: "{Video Description} --[Generates]--> {Video Script}",
+                systemPrompt: `You are an expert video writer. You ONLY produce text that is read. You only produce the script that will be read by a voice actor for a video. The user will give you the description of the video they want you to make and from that, you will write the script. Make sure to directly write the script in response to the video description.
+Your script will not have any reference to the audio footage/video footage shown. Only the text that will be narrated by the voice actor.
+You will produce purely text.
+Don't write any other textual thing than the text itself.
+Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
+            },
+            {
+                name: "Shorts Video Editor",
+                inputEntity: "Transcript",
+                outputEntity: "Image Queries",
+                morphism: "{Transcript} --[Generates]--> {Image Queries}",
+                systemPrompt: `You are a shorts video editor. Your audience is people from 18 yo to 40yo. Your style of editing is pretty simple, you take the transcript of your short and put a very simple google image to illustrate the narrated sentences.
+...
+NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN THE QUERIES.`
+            },
+            {
+                name: "Video Research Expert",
+                inputEntity: "Timed Captions",
+                outputEntity: "Video Search Queries",
+                morphism: "{Timed Captions} --[Generates]--> {Video Search Queries}",
+                systemPrompt: `You're a video research expert. The user will give you the timed captions of a video they will make, and you will give back a list of text search queries that will be used to search for background video footage.`
+            },
+            {
+                name: "Facts Content Writer",
+                inputEntity: "Facts Type",
+                outputEntity: "Captivating Script",
+                morphism: "{Facts Type} --[Generates]--> {Captivating Script}",
+                systemPrompt: `You are an expert content writer of a YouTube shorts channel. You specialize in 'facts' shorts. Your facts shorts are less than 50 seconds verbally (around 140 words maximum). They are extremely captivating and original.`
+            },
+            {
+                name: "Random Subject Generator",
+                inputEntity: "Series Request",
+                outputEntity: "Subjects Array",
+                morphism: "{Series Request} --[Generates]--> {Subjects Array}",
+                systemPrompt: `For a series of <<N>> YouTube videos about top 10 facts on a certain subject, pick a random subject. Be very original. Put it in the '<<Subject>> facts' format.`
+            },
+            {
+                name: "Reddit Ask Question Extractor",
+                inputEntity: "Reddit Transcript",
+                outputEntity: "Thread Question",
+                morphism: "{Reddit Transcript} --[Extracts]--> {Thread Question}",
+                systemPrompt: `From the transcript of a Reddit ask, tell me the question in the title. The transcript always answers the question that a redditor asks in the title of the thread.`
+            },
+            {
+                name: "Story Realism Judge",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score}",
+                systemPrompt: `You are the judge of the story. Your goal will be to judge if it can possibly happen. If it's possible and the story makes sense, then it's a 10. If not, it's a 0.`
+            },
+            {
+                name: "Reddit Ask Thread Question Generator",
+                inputEntity: "User Input",
+                outputEntity: "Interesting Question",
+                morphism: "{User Input} --[Generates]--> {Interesting Question}",
+                systemPrompt: `You will write an interesting Reddit ask thread question. The question must be a short, open-ended question that requires opinion/anecdotal-based answers.`
+            },
+            {
+                name: "YouTube Shorts Content Creator",
+                inputEntity: "Reddit Question",
+                outputEntity: "Anecdote Script",
+                morphism: "{Reddit Question} --[Generates]--> {Anecdote Script}",
+                systemPrompt: `You are a YouTube shorts content creator. You make extremely captivating shorts based on answers from AskReddit. Create a highly engaging anecdote for a YouTube short.`
+            },
+            {
+                name: "Realism Filter for YouTube Shorts Story",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score and Explanation",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score and Explanation}",
+                systemPrompt: `You're a judge of the realisticness of a story for a YouTube short. Determine if it can possibly happen and provide a score.`
+            },
+            {
+                name: "Reddit Username Generator",
+                inputEntity: "User Request",
+                outputEntity: "Random Reddit Username",
+                morphism: "{User Request} --[Generates]--> {Random Reddit Username}",
+                systemPrompt: `Generate a random Reddit name with one or two numbers inside the name. Make it sound natural.`
+            },
+            {
+                name: "Content Translator",
+                inputEntity: "Content Input",
+                outputEntity: "Translated Content in Target Language",
+                morphism: "{Content Input} --[Translates]--> {Translated Content in Target Language}",
+                systemPrompt: `You're an expert content translator to <<LANGUAGE>>. You always translate sentences properly, and you write numbers in WORDS, not digits.`
+            },
+            {
+                name: "Narrator Gender Identifier",
+                inputEntity: "Narrated Transcript",
+                outputEntity: "Narrator Gender",
+                morphism: "{Narrated Transcript} --[Identifies]--> {Narrator Gender}",
+                systemPrompt: `I will give you a narrated transcript, and you must identify if it's most probably a male or female.`
+            },
             {
                 name: "YouTube Shorts Title and Description Generator",
                 inputEntity: "Short Transcript",
@@ -442,22 +554,32 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
             if (e.key === 'Enter') sendMessage();
         });
         testApiKeyButton.addEventListener('click', testApiKey);
-        copyConsoleButton.addEventListener('click', () => copyToClipboard(consoleOutput.textContent));
-        copyChatButton.addEventListener('click', () => copyToClipboard(chatMessages.innerText));
-
+        resetUsageButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset usage statistics?')) {
+                resetUsage();
+            }
+        });
         systemPromptSelect.addEventListener('change', displayPromptDetails);
+        viewPromptButton.addEventListener('click', viewSystemPrompt);
 
         // Utility Functions
         function log(message) {
             console.log(message);
-            consoleOutput.textContent += message + '\n';
-            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+            consoleLog.textContent += message + '\n';
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        function sanitizeApiKey(apiKey) {
+            if (!apiKey) return '';
+            // Trim whitespace and remove any non-printable characters
+            return apiKey.trim().replace(/[\u007F-\uFFFF]/g, '');
         }
 
         async function testApiKey() {
-            const apiKey = apiKeyInput.value.trim();
+            const apiKeyRaw = apiKeyInput.value;
+            const apiKey = sanitizeApiKey(apiKeyRaw);
             if (!apiKey) {
-                log('Please enter an API key.');
+                log('Please enter a valid API key.');
                 return;
             }
 
@@ -471,8 +593,10 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
 
                 if (response.ok) {
                     log('API key is valid!');
-                } else {
+                } else if (response.status === 401) {
                     log('API key is invalid. Please check and try again.');
+                } else {
+                    log(`Unexpected response: ${response.status} ${response.statusText}`);
                 }
             } catch (error) {
                 log(`Error testing API key: ${error.message}`);
@@ -483,12 +607,13 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
 
         async function sendMessage() {
             const message = messageInput.value.trim();
-            const apiKey = apiKeyInput.value.trim();
+            const apiKeyRaw = apiKeyInput.value;
+            const apiKey = sanitizeApiKey(apiKeyRaw);
             const selectedPromptIndex = systemPromptSelect.value;
 
             if (!message) return;
             if (!apiKey) {
-                log('Please enter an API key before sending a message.');
+                log('Please enter a valid API key before sending a message.');
                 return;
             }
             if (selectedPromptIndex === "") {
@@ -496,9 +621,11 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 return;
             }
 
-            const systemPrompt = templates[selectedPromptIndex].systemPrompt;
+            const selectedTemplate = templates[selectedPromptIndex];
+            const systemPrompt = selectedTemplate.systemPrompt;
+            const aiName = selectedTemplate.name;
 
-            addMessageToChat('User', message);
+            addMessageToChat('user', 'User', message);
             messageInput.value = '';
 
             log('Sending message to OpenAI API...');
@@ -531,13 +658,17 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    if (response.status === 401) {
+                        throw new Error('Invalid API key. Please check and try again.');
+                    } else {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
                 }
 
                 const data = await response.json();
                 const aiResponse = data.choices[0].message.content.trim();
                 log('Received response from OpenAI API');
-                addMessageToChat('AI', aiResponse);
+                addMessageToChat('ai', aiName, aiResponse);
 
                 // Estimate tokens for output
                 let outputTokens = estimateTokens(aiResponse);
@@ -545,7 +676,6 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 // Update usage stats
                 totalTokens += (inputTokens + outputTokens);
                 // Determine model used for pricing
-                const modelUsed = data.model || "gpt4"; // Adjust based on API response
                 const inputCost = inputTokens * pricing.gpt4.input; // Modify if supporting multiple models
                 const outputCost = outputTokens * pricing.gpt4.output; // Modify if supporting multiple models
                 totalCost += (inputCost + outputCost);
@@ -557,24 +687,74 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 conversationHistory.push({ role: "assistant", content: aiResponse });
             } catch (error) {
                 log(`Error: ${error.message}`);
-                addMessageToChat('AI', 'Sorry, there was an error processing your request.');
+                addMessageToChat('ai', 'Error', 'Sorry, there was an error processing your request.');
             }
         }
 
-        function addMessageToChat(sender, message) {
+        function addMessageToChat(role, name, messageContent) {
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender.toLowerCase());
+            messageElement.classList.add('message', role.toLowerCase());
 
-            // Color Coding for System Prompts
-            if (sender === 'AI') {
-                messageElement.style.borderLeft = '5px solid #FFC107'; // Honey Yellow accent
-            } else if (sender === 'User') {
-                messageElement.style.borderRight = '5px solid #3498db'; // Blue accent
+            if (role.toLowerCase() === 'ai') {
+                const agentStyle = agentStyles[name] || { emoji: "🤖", color: "#FFC107" };
+                // Create Agent Icon
+                const agentIcon = document.createElement('span');
+                agentIcon.classList.add('agent-icon');
+                agentIcon.textContent = agentStyle.emoji;
+
+                // Apply border color based on agent
+                messageElement.style.borderLeft = `5px solid ${agentStyle.color}`;
+
+                // Append Agent Icon and Message Content
+                messageElement.appendChild(agentIcon);
+                const messageText = document.createElement('span');
+                messageText.innerHTML = `<strong>${name}:</strong> ${messageContent}`;
+                messageElement.appendChild(messageText);
+            } else if (role.toLowerCase() === 'user') {
+                messageElement.innerHTML = `<strong>User:</strong> ${messageContent}`;
+                messageElement.style.borderRight = '5px solid #3498db'; // Blue accent for user
             }
 
-            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function estimateTokens(text) {
+            // Simple heuristic: 1 token ≈ 4 characters
+            return Math.ceil(text.length / 4);
+            // For more accurate token counts, consider integrating a tokenizer library
+            // Example with gpt-3-encoder:
+            // return gpt3Encoder.encode(text).length;
+        }
+
+        function updateUsageDisplay() {
+            totalTokensSpan.textContent = totalTokens;
+            estimatedCostSpan.textContent = totalCost.toFixed(4);
+        }
+
+        function resetUsage() {
+            totalTokens = 0;
+            totalCost = 0;
+            updateUsageDisplay();
+            log('Usage statistics have been reset.');
+        }
+
+        function viewSystemPrompt() {
+            const selectedPromptIndex = systemPromptSelect.value;
+            if (selectedPromptIndex === "") {
+                alert('Please select a system prompt first.');
+                return;
+            }
+            const selectedTemplate = templates[selectedPromptIndex];
+            const systemPrompt = selectedTemplate.systemPrompt;
+
+            // Toggle visibility
+            if (systemPromptCode.style.display === 'none' || systemPromptCode.style.display === '') {
+                systemPromptCode.textContent = systemPrompt;
+                systemPromptCode.style.display = 'block';
+            } else {
+                systemPromptCode.style.display = 'none';
+            }
         }
 
         function copyToClipboard(text) {
@@ -592,12 +772,16 @@ Make sure the text is not longer than 200 words (keep the video pretty short and
                 inputEntitySpan.textContent = "N/A";
                 outputEntitySpan.textContent = "N/A";
                 morphismSpan.textContent = "N/A";
+                // Hide system prompt code if no prompt is selected
+                systemPromptCode.style.display = 'none';
                 return;
             }
             const template = templates[selectedIndex];
             inputEntitySpan.textContent = template.inputEntity;
             outputEntitySpan.textContent = template.outputEntity;
             morphismSpan.textContent = template.morphism;
+            // Hide system prompt code when a new prompt is selected
+            systemPromptCode.style.display = 'none';
         }
 
         // Initialize Usage Display on Page Load

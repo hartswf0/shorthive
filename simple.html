@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating a Simple Chatbot using OpenAI's API</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            font-size: 2.5em;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        header p {
+            font-size: 1.2em;
+            color: #555;
+        }
+        /* Table of Contents */
+        nav {
+            margin-bottom: 30px;
+        }
+        nav ul {
+            list-style: none;
+        }
+        nav ul li {
+            margin-bottom: 10px;
+        }
+        nav ul li a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+        /* Sections */
+        section {
+            margin-bottom: 40px;
+        }
+        section h2 {
+            font-size: 2em;
+            color: #007BFF;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 5px;
+        }
+        section h3 {
+            font-size: 1.5em;
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        /* Lists */
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        /* Code Blocks */
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-left: 5px solid #007BFF;
+            overflow-x: auto;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            color: #d63384;
+        }
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        /* Highlight Important Notes */
+        .note {
+            background: #fff3cd;
+            border-left: 5px solid #ffeeba;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .note strong {
+            color: #856404;
+        }
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #777;
+        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            section h2 {
+                font-size: 1.8em;
+            }
+            section h3 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Creating a Simple Chatbot using OpenAI's API</h1>
+            <p>A Step-by-Step Tutorial for Computational Media Students</p>
+        </header>
+
+        <!-- Table of Contents -->
+        <nav>
+            <ul>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#how-chatbot-works">How The Chatbot Works</a></li>
+                <li><a href="#security-considerations">Security Considerations</a></li>
+                <li><a href="#free-alternatives">Free Alternatives for Building Chatbots</a></li>
+                <li><a href="#additional-elements">Additional Key Elements, Process Notes, and Tradeoffs</a></li>
+                <li><a href="#project-overview">Chatbot Project Overview</a></li>
+            </ul>
+        </nav>
+
+        <!-- Getting Started Section -->
+        <section id="getting-started">
+            <h2>Getting Started</h2>
+            <h3>1. Obtain an OpenAI API Key</h3>
+            <ol>
+                <li>Visit the OpenAI website at <a href="https://platform.openai.com/playground" target="_blank">platform.openai.com/playground</a>.</li>
+                <li>Go to your dashboard.</li>
+                <li>Navigate to the API Keys section.</li>
+                <li>Create a new secret key and give it a descriptive name.</li>
+                <li>Copy the generated key and store it securely in an offline location like a text file.</li>
+                <li><strong>Important:</strong> You will not be able to see the key again after clicking the "Done" button. If you lose the key, you'll need to generate a new one.</li>
+            </ol>
+
+            <h3>2. Setup Project Files</h3>
+            <ol>
+                <li>Create three empty files in your project directory:</li>
+                <ul>
+                    <li><code>index.html</code></li>
+                    <li><code>script.js</code></li>
+                    <li><code>styles.css</code></li>
+                </ul>
+                <li>Rename <code>script.js</code> to <code>chatbot.js</code>.</li>
+            </ol>
+
+            <h3>3. Generate Code with ChatGPT</h3>
+            <ol>
+                <li>Go to ChatGPT and ask it to write a simple chatbot with an HTML interface using OpenAI's API and JavaScript.</li>
+                <li>Request that the HTML and JavaScript be separated into separate files.</li>
+                <li>Copy the HTML code into <code>index.html</code>.</li>
+                <li>Copy the CSS code into <code>styles.css</code>.</li>
+                <li>Copy the JavaScript code into <code>chatbot.js</code>.</li>
+            </ol>
+
+            <h3>4. Insert Your API Key</h3>
+            <ol>
+                <li>In the <code>chatbot.js</code> file, find the line where it says "your API key".</li>
+                <li>Replace this placeholder with the API key you generated earlier.</li>
+            </ol>
+
+            <h3>5. Run the Chatbot</h3>
+            <ol>
+                <li>Open <code>index.html</code> in Visual Studio Code.</li>
+                <li>Right-click on the <code>index.html</code> file and select "Go Live" to open the HTML file in your web browser.</li>
+                <li>You should see your chatbot interface!</li>
+            </ol>
+        </section>
+
+        <!-- How The Chatbot Works Section -->
+        <section id="how-chatbot-works">
+            <h2>How The Chatbot Works</h2>
+            <h3>User Input</h3>
+            <p>The user types a message in the provided text area of the chatbot interface.</p>
+
+            <h3>Sending the Message</h3>
+            <p>When the user clicks "Send", the JavaScript code sends the message to the OpenAI API.</p>
+            <ul>
+                <li>The code formats the message as a JSON file.</li>
+                <li>The code also includes the user's API key, so OpenAI can charge for using the model.</li>
+            </ul>
+
+            <h3>Generating a Response</h3>
+            <p>OpenAI's API receives the user's message and uses its language model to create a response.</p>
+
+            <h3>Returning the Response</h3>
+            <p>The API sends its response back to the JavaScript code.</p>
+
+            <h3>Displaying the Response</h3>
+            <p>The JavaScript code displays the API's response on the HTML page.</p>
+
+            <h3>Conversation Memory</h3>
+            <p>In its initial version, this chatbot doesn't have any memory of the conversation, meaning each question and answer is treated as a fresh start. This can be modified.</p>
+        </section>
+
+        <!-- Security Considerations Section -->
+        <section id="security-considerations">
+            <h2>Security Considerations</h2>
+            <h3>Protect Your API Key</h3>
+            <p>Your API key should be treated like a password.</p>
+            <ul>
+                <li>Don't share your API key publicly.</li>
+                <li>Don't store it in code that is publicly accessible.</li>
+                <li>If using a school computer, do not store your API key in your code on that computer.</li>
+            </ul>
+
+            <h3>Set Usage Limits</h3>
+            <p>To prevent unexpected charges, set usage limits and disable automatic refills in your OpenAI account settings. This way, even if your key is compromised, the financial impact will be limited.</p>
+
+            <h3>Hiding Your API Key</h3>
+            <p>Techniques exist to hide your API key when deploying your chatbot to the web. These techniques ensure others can interact with your chatbot without having access to your key. You will learn more about this later.</p>
+        </section>
+
+        <!-- Free Alternatives Section -->
+        <section id="free-alternatives">
+            <h2>Free Alternatives for Building Chatbots</h2>
+            <h3>Hugging Face Spaces</h3>
+            <ul>
+                <li>A platform that offers free hosting for chatbots and other machine learning projects.</li>
+                <li>It utilizes Python, a programming language you will learn later.</li>
+                <li>Provides a user-friendly interface with a built-in feature to customize the system message.</li>
+                <li>Offers free access to various language models like the Zephyr 7B, which can be used for chatbot development.</li>
+                <li>You can download your project's files and run them locally using Python.</li>
+            </ul>
+            <p>The instructors will provide more detailed explanations and demonstrate advanced chatbot features in the coming weeks.</p>
+        </section>
+
+        <!-- Additional Elements Section -->
+        <section id="additional-elements">
+            <h2>Additional Key Elements, Process Notes, and Tradeoffs</h2>
+
+            <h3>System Instructions</h3>
+            <div class="note">
+                <strong>Purpose:</strong> System instructions function like a set of guidelines or a mission statement for the language model. They are provided alongside your prompt and operate behind the scenes, influencing how the model generates its completion.
+            </div>
+            <ul>
+                <li><strong>Impact:</strong> Carefully crafted system instructions can significantly improve the chatbot's output, enabling it to:
+                    <ul>
+                        <li>Adopt a specific persona (e.g., a British tea snob)</li>
+                        <li>Follow particular formatting rules (e.g., provide code in JavaScript syntax)</li>
+                        <li>Achieve desired outcomes (e.g., generate website HTML for tea brands)</li>
+                    </ul>
+                </li>
+                <li><strong>Experimentation:</strong> The effect of system instructions can be unpredictable. Sometimes, a change in the system instructions might have a dramatic impact, while other times, the difference might be negligible. Experimentation and comparison are crucial for finding effective system instructions.</li>
+                <li><strong>Implementation:</strong> In the JavaScript method demonstrated, you would integrate your system instructions into the message sent to the model.</li>
+            </ul>
+
+            <h3>Temperature</h3>
+            <div class="note">
+                <strong>Definition:</strong> The temperature parameter controls the randomness of the language model's output.
+            </div>
+            <ul>
+                <li><strong>Range:</strong> The temperature typically ranges from 0 to 2.</li>
+                <li><strong>Impact:</strong>
+                    <ul>
+                        <li><strong>Higher temperature:</strong> (closer to 2) Results in more creative and unpredictable responses, potentially introducing unexpected languages, errors, or unusual formats.</li>
+                        <li><strong>Lower temperature:</strong> (closer to 0) Leads to more predictable and deterministic responses, often sticking to expected patterns and formats. A temperature of 0 aims for maximum predictability, but even then, the same prompt might not always produce the identical output.</li>
+                    </ul>
+                </li>
+                <li><strong>Default Value:</strong> The default temperature is usually set to 1.</li>
+            </ul>
+
+            <h3>Prompting Strategies</h3>
+            <ul>
+                <li><strong>Moving Beyond Questions:</strong> Traditional search engines have conditioned us to interact using questions. However, when working with language models, using direct commands can be more effective.</li>
+                <li><strong>Example:</strong> Instead of "Can you give me a recipe?", try a more authoritative approach, such as "You must give me a recipe," to guide the model toward the desired outcome.</li>
+            </ul>
+
+            <h3>Tradeoffs: OpenAI API vs. Hugging Face Spaces</h3>
+            <h4>OpenAI API</h4>
+            <ul>
+                <li><strong>Advantages:</strong>
+                    <ul>
+                        <li>Access to powerful models like GPT-3.5 and GPT-4.</li>
+                        <li>Greater control over customization.</li>
+                    </ul>
+                </li>
+                <li><strong>Disadvantages:</strong>
+                    <ul>
+                        <li>Requires a paid subscription.</li>
+                        <li>More complex setup and potential security concerns regarding API key management.</li>
+                    </ul>
+                </li>
+            </ul>
+            <h4>Hugging Face Spaces</h4>
+            <ul>
+                <li><strong>Advantages:</strong>
+                    <ul>
+                        <li>Free to use.</li>
+                        <li>Easy setup through a user-friendly interface.</li>
+                        <li>Automatic hosting on the internet.</li>
+                    </ul>
+                </li>
+                <li><strong>Disadvantages:</strong>
+                    <ul>
+                        <li>Relies on Python, which is not covered in the initial part of the course.</li>
+                        <li>May have usage limitations.</li>
+                        <li>Potentially less capable models compared to OpenAI's offerings.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Process Note: Incorporating Memory</h3>
+            <ul>
+                <li><strong>Stateless by Default:</strong> The initial chatbot example is "stateless," meaning it does not retain any memory of previous interactions. Each prompt is treated in isolation.</li>
+                <li><strong>Adding Memory:</strong> To provide the chatbot with memory, you need to modify the code to:
+                    <ul>
+                        <li>Keep track of the entire conversation history.</li>
+                        <li>Include this conversation history as part of every prompt sent to the model.</li>
+                    </ul>
+                </li>
+                <li><strong>Challenges:</strong>
+                    <ul>
+                        <li>As the conversation lengthens, sending the entire history can become computationally expensive and potentially exceed token limits.</li>
+                        <li>Sophisticated memory management techniques may be required for extended conversations.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Project Overview Section -->
+        <section id="project-overview">
+            <h2>Chatbot Project Overview: Key Information and Specifics</h2>
+
+            <h3>Objective</h3>
+            <ul>
+                <li>Your team will build a chatbot using JavaScript and a chatbot framework, with the freedom to choose among options like OpenAI API, Hugging Face Spaces, or other suitable frameworks.</li>
+                <li>The minimum requirement is for the chatbot to embody either:
+                    <ul>
+                        <li><strong>Personality:</strong> This could involve adopting a distinct voice, tone, and style in its responses.</li>
+                        <li><strong>Area of Knowledge:</strong> The chatbot could be specialized in a particular domain, such as cooking, history, or technology, providing knowledgeable answers within that area.</li>
+                        <li><strong>Perspective:</strong> The chatbot might present information from a specific viewpoint or ideology, influencing how it interprets and responds to user input.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Collaboration and Teamwork</h3>
+            <ul>
+                <li><strong>Team Size:</strong> Work in groups of 4.</li>
+                <li><strong>Teamwork Emphasis:</strong> You are encouraged to collaborate actively, share knowledge, and avoid dividing the project into isolated tasks.</li>
+                <li><strong>Grading:</strong> All team members will receive the same grade.</li>
+            </ul>
+
+            <h3>Technical Resources and Tools</h3>
+            <ul>
+                <li><strong>Language:</strong> JavaScript is the primary programming language.</li>
+                <li><strong>Chatbot Frameworks:</strong>
+                    <ul>
+                        <li><strong>OpenAI API:</strong>
+                            <ul>
+                                <li>Provides access to powerful language models (like GPT-3.5 and GPT-4), but requires a paid account and API key management for security.</li>
+                                <li>Testing with the OpenAI API will incur a small cost.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Hugging Face Spaces:</strong>
+                            <ul>
+                                <li>Offers free hosting and access to a variety of language models, some of which are free to use.</li>
+                                <li>Utilizes Python for its backend, which the course will cover later.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Other Frameworks:</strong> You are free to explore and utilize additional chatbot frameworks as your team sees fit.</li>
+                    </ul>
+                </li>
+                <li><strong>Local Testing:</strong> You can run and test your chatbot on your local machine (any platform) using Visual Studio Code or another suitable code editor.</li>
+                <li><strong>AI Assistance Tools:</strong>
+                    <ul>
+                        <li>You are permitted to leverage AI tools like Claude, ChatGPT, and Copilot to aid you throughout the development process, including code generation, debugging, and refining system instructions.</li>
+                    </ul>
+                </li>
+                <li><strong>Optional Tools:</strong> Consider additional tools to enhance creativity and presentation:
+                    <ul>
+                        <li><strong>3D Avatar Makers:</strong> Such as <a href="https://readyplayer.me/" target="_blank">Ready Player Me</a> to create a visual representation of your chatbot.</li>
+                        <li><strong>Character Animators:</strong> Like <a href="https://www.mixamo.com/#/" target="_blank">Mixamo</a> to add movement and expressiveness to your chatbot's avatar.</li>
+                        <li><strong>Other Tools:</strong> Explore other tools as needed to support your project's goals and enhance its features.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h3>Key Considerations</h3>
+            <ul>
+                <li><strong>Understanding System Instructions:</strong> System instructions are crucial for shaping the chatbot's behavior and responses. Experimentation and comparison are needed to find effective instructions.</li>
+                <li><strong>Temperature Control:</strong> Adjust the temperature parameter to control the randomness of the chatbot's output, striking a balance between creativity and predictability.</li>
+                <li><strong>Effective Prompting:</strong> Use clear and direct commands instead of relying solely on questions to communicate your intent to the language model.</li>
+                <li><strong>API Key Security:</strong> Handle API keys with extreme care, as they grant access to your OpenAI account and could be misused if compromised.</li>
+                <li><strong>Free vs. Paid Options:</strong> Evaluate the tradeoffs between free options like Hugging Face Spaces and paid services like OpenAI API, considering factors such as model capabilities, cost, and ease of setup.</li>
+            </ul>
+
+            <h3>Submission Requirements</h3>
+            <ul>
+                <li><strong>Working URL:</strong> Submit a functional URL that points to your hosted chatbot page. You can host your webpage on GitHub if you are using the OpenAI API. Ensure you safeguard your API key during deployment.</li>
+                <li><strong>Zipped Source Code:</strong> Upload a zipped archive containing all your source code files. Include clear and comprehensive comments within your code to explain its functionality.</li>
+                <li><strong>Project Statement PDF:</strong> Attach a one- or two-page project statement as a PDF document. This statement should outline the following:
+                    <ul>
+                        <li><strong>Purpose:</strong> Clearly articulate the aim of your chatbot. What is its intended use case, target audience, and overall goal?</li>
+                        <li><strong>Development Process:</strong> Describe the steps your team took to create the chatbot. What were the key decisions, challenges, and solutions you encountered?</li>
+                        <li><strong>Rationale:</strong> Explain the reasoning behind your choices. Why did you select a particular framework, personality, area of knowledge, or perspective for your chatbot?</li>
+                        <li><strong>Frameworks Used:</strong> List all the frameworks and tools your team utilized during the development process, including the primary chatbot framework (OpenAI API, Hugging Face Spaces, or another), any AI assistance tools (Claude, ChatGPT, Copilot, etc.), and optional tools like 3D avatar makers or character animators.</li>
+                        <li><strong>Screenshots/Videos:</strong> Include visuals to showcase your chatbot in action. Capture screenshots or recordings that demonstrate user interactions, input prompts, and the chatbot's generated responses, highlighting its personality, knowledge, or perspective.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="note">
+                <strong>Important Points to Remember:</strong>
+                <ul>
+                    <li><strong>Clarity and Conciseness:</strong> Your project statement should be well-written and easy to understand. Use clear language and avoid technical jargon unless it's necessary and properly explained.</li>
+                    <li><strong>Focus on the User:</strong> Highlight how your chatbot interacts with the user and the overall user experience you aim to provide.</li>
+                    <li><strong>Reflection:</strong> Demonstrate your understanding of the key concepts and challenges involved in chatbot development. Reflect on your team's learning process and the insights you gained.</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <strong>Additional Considerations:</strong> It's common practice in coding courses to create a README file in your GitHub repository. This file typically provides instructions on how to run your code locally, a brief explanation of the project, and any dependencies required. You may want to include a README file in your submission as well.
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2024 Computational Media Course. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
