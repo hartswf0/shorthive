@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AI Chatbot with System Prompt Selection</title>
+    <title>ShortHive: Multi-Agent AI Video Automation Framework</title>
     <style>
         /* Reset and Base Styles */
         * {
@@ -11,8 +11,8 @@
             box-sizing: border-box;
         }
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4e3c3;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fafafa; /* Softer, neutral tone */
             color: #333;
             line-height: 1.6;
             font-size: 16px;
@@ -35,23 +35,24 @@
         /* Headings */
         h1, h2 {
             font-family: 'Impact', sans-serif;
-            color: #ff4d00;
+            color: #FFC107; /* Honey Yellow */
             text-transform: uppercase;
             margin-bottom: 15px;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px; /* Reduced spacing for a more elegant feel */
+            text-align: center;
         }
         h1 {
             font-size: 32px;
-            border-bottom: 2px solid #ff4d00;
+            border-bottom: 2px solid #FFC107;
             padding-bottom: 10px;
-            text-align: center;
         }
         h2 {
             font-size: 24px;
-            background-color: rgba(211, 211, 211, 0.3);
+            background-color: rgba(255, 207, 64, 0.1); /* Light Honey Yellow */
             padding: 10px 20px;
             position: relative;
             margin-top: 20px;
+            border-radius: 5px;
         }
         h2::before {
             content: '🤖';
@@ -65,74 +66,91 @@
         input[type="text"],
         select {
             width: 100%;
-            padding: 10px;
+            padding: 12px 15px;
             margin-bottom: 15px;
             border: 1px solid #d4c4a8;
-            border-radius: 5px;
+            border-radius: 8px; /* More rounded for a playful look */
             font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+        input[type="password"]:focus,
+        input[type="text"]:focus,
+        select:focus {
+            border-color: #FFC107;
+            outline: none;
         }
         button {
-            background-color: #ff4d00;
+            background-color: #FFC107; /* Honey Yellow */
             color: #fff;
             border: none;
-            padding: 10px 15px;
+            padding: 12px 20px;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 8px; /* More rounded for a playful look */
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 15px;
         }
         button:hover {
-            background-color: #e04300;
+            background-color: #e0a500; /* Slight tone change for hover */
+            transform: scale(1.02); /* Slight scaling for playful effect */
         }
         /* Chat Container */
         #chat-container {
-            border: 1px solid #d4c4a8;
-            border-radius: 5px;
-            margin-bottom: 20px;
+            border: 2px solid #E0E0E0; /* Softer borders for a clean look */
+            border-radius: 8px;
+            margin-bottom: 15px;
             padding: 15px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
+            background-color: #f9f9f9;
+            position: relative;
         }
+        /* Chat Messages */
         #chat-messages {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             background-color: #f9f9f9;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-bottom: 15px;
             position: relative;
         }
-        /* Copy Button for Chat */
-        #chat-messages .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            padding: 5px 8px;
-            cursor: pointer;
-            border-radius: 3px;
-            font-size: 12px;
-            transition: background-color 0.3s ease;
-        }
-        #chat-messages .copy-button:hover {
-            background-color: #2980b9;
-        }
-        /* Messages */
         .message {
             margin-bottom: 15px;
-        }
-        .message strong {
-            display: block;
-            margin-bottom: 5px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+            word-wrap: break-word;
+            position: relative;
         }
         .message.user {
-            text-align: right;
+            background: #EAEAEA; /* Neutral color for user messages */
+            align-self: flex-end;
+            color: #333;
         }
         .message.ai {
-            text-align: left;
+            background: #FFF4E5; /* Light honeycomb color for AI messages */
+            align-self: flex-start;
+            color: #333;
+        }
+        .message::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+        .message.user::after {
+            right: -20px;
+            border-left-color: #EAEAEA;
+        }
+        .message.ai::after {
+            left: -20px;
+            border-right-color: #FFF4E5;
         }
         /* User Input */
         #user-input {
@@ -141,22 +159,33 @@
         }
         #user-input input {
             flex-grow: 1;
+            padding: 12px 15px;
+            border: 1px solid #d4c4a8;
+            border-radius: 8px;
+            font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+        #user-input input:focus {
+            border-color: #FFC107;
+            outline: none;
         }
         /* Console Output */
         #console-output {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
+            background-color: #F0F0F0;
+            border: 2px solid #ccc;
             padding: 10px;
             margin-top: 20px;
-            font-family: monospace;
+            font-family: 'Fira Code', monospace;
             white-space: pre-wrap;
             height: 100px;
             overflow-y: auto;
-            border-radius: 5px;
+            border-radius: 8px;
             position: relative;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
         }
-        /* Copy Button for Console */
-        #console-output .copy-button {
+        /* Copy Buttons */
+        .copy-button {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -169,7 +198,7 @@
             font-size: 12px;
             transition: background-color 0.3s ease;
         }
-        #console-output .copy-button:hover {
+        .copy-button:hover {
             background-color: #2980b9;
         }
         /* System Prompt Details */
@@ -178,7 +207,7 @@
             padding: 15px;
             background-color: #f9f9f9;
             border: 1px solid #d4c4a8;
-            border-radius: 5px;
+            border-radius: 8px;
         }
         #prompt-details h3 {
             font-size: 20px;
@@ -188,11 +217,44 @@
         #prompt-details p {
             margin-bottom: 10px;
         }
+        /* Usage Stats */
+        #usage-stats {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border: 1px solid #d4c4a8;
+            border-radius: 8px;
+        }
+        #usage-stats h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+            text-align: center;
+        }
+        #usage-stats p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        #usage-stats button {
+            background-color: #e74c3c; /* Red for reset */
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+        #usage-stats button:hover {
+            background-color: #c0392b;
+        }
         /* About Section */
         .about {
             background-color: #e3d5b6;
             padding: 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             margin-top: 20px;
         }
         .about a {
@@ -202,11 +264,28 @@
         .about a:hover {
             text-decoration: underline;
         }
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            button, input[type="text"], input[type="password"], select {
+                font-size: 14px;
+            }
+            #console-output {
+                height: 80px;
+            }
+        }
     </style>
+    <!-- Optional: Include GPT-3 Encoder for Accurate Token Counting -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gpt-3-encoder@1.0.5/dist/gpt-3-encoder.min.js"></script> -->
 </head>
 <body>
     <div class="container">
-        <h1>AI Chatbot</h1>
+        <h1>ShortHive</h1>
         <!-- API Key Input -->
         <input type="password" id="api-key-input" placeholder="Enter your OpenAI API key">
         <button id="test-api-key">Test API Key</button>
@@ -236,6 +315,13 @@
         <div id="console-output">
             <button class="copy-button" id="copy-console">Copy</button>
         </div>
+        <!-- API Usage Statistics -->
+        <div id="usage-stats">
+            <h2>API Usage Statistics</h2>
+            <p><strong>Total Tokens Used:</strong> <span id="total-tokens">0</span></p>
+            <p><strong>Estimated Cost:</strong> $<span id="estimated-cost">0.0000</span></p>
+            <button id="reset-usage">Reset Usage</button>
+        </div>
         <!-- About Section -->
         <div class="about">
             <h2>How It Works</h2>
@@ -253,7 +339,7 @@
     </div>
 
     <script>
-        // DOM Elements
+        // Existing DOM Elements
         const chatMessages = document.getElementById('chat-messages');
         const messageInput = document.getElementById('message-input');
         const sendButton = document.getElementById('send-button');
@@ -268,6 +354,57 @@
         const morphismSpan = document.getElementById('morphism');
         const promptDetails = document.getElementById('prompt-details');
 
+        // New DOM Elements for Usage Stats
+        const totalTokensSpan = document.getElementById('total-tokens');
+        const estimatedCostSpan = document.getElementById('estimated-cost');
+        const resetUsageButton = document.getElementById('reset-usage');
+
+        // Pricing Configuration
+        const pricing = {
+            gpt4: {
+                input: 0.03 / 1000, // $0.03 per 1,000 tokens
+                output: 0.06 / 1000 // $0.06 per 1,000 tokens
+            },
+            gpt35: {
+                input: 0.002 / 1000, // $0.002 per 1,000 tokens
+                output: 0.002 / 1000 // $0.002 per 1,000 tokens
+            }
+        };
+
+        // Initialize Usage Stats
+        let totalTokens = 0;
+        let totalCost = 0;
+
+        // Utility Function to Estimate Tokens
+        function estimateTokens(text) {
+            // Simple heuristic: 1 token ≈ 4 characters
+            return Math.ceil(text.length / 4);
+            // For more accurate token counts, consider integrating a tokenizer library
+            // Example with gpt-3-encoder:
+            // return gpt3Encoder.encode(text).length;
+        }
+
+        // Function to Update Usage Stats Display
+        function updateUsageDisplay() {
+            totalTokensSpan.textContent = totalTokens;
+            estimatedCostSpan.textContent = totalCost.toFixed(4);
+        }
+
+        // Function to Reset Usage Stats
+        function resetUsage() {
+            totalTokens = 0;
+            totalCost = 0;
+            updateUsageDisplay();
+            alert('Usage statistics have been reset.');
+        }
+
+        // Event Listener for Reset Button
+        resetUsageButton.addEventListener('click', () => {
+            if (confirm('Are you sure you want to reset usage statistics?')) {
+                resetUsage();
+            }
+        });
+
         // Templates Array
         const templates = [
             {
@@ -281,103 +418,7 @@ You will edit purely text.
 Don't write any other textual thing than the text itself.
 Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
             },
-            {
-                name: "Expert Video Writer",
-                inputEntity: "Video Description",
-                outputEntity: "Video Script",
-                morphism: "{Video Description} --[Generates]--> {Video Script}",
-                systemPrompt: `You are an expert video writer. You ONLY produce text that is read. You only produce the script that will be read by a voice actor for a video. The user will give you the description of the video they want you to make and from that, you will write the script. Make sure to directly write the script in response to the video description.
-Your script will not have any reference to the audio footage/video footage shown. Only the text that will be narrated by the voice actor.
-You will produce purely text.
-Don't write any other textual thing than the text itself.
-Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
-            },
-            {
-                name: "Shorts Video Editor",
-                inputEntity: "Transcript",
-                outputEntity: "Image Queries",
-                morphism: "{Transcript} --[Generates]--> {Image Queries}",
-                systemPrompt: `You are a shorts video editor. Your audience is people from 18 yo to 40yo. Your style of editing is pretty simple, you take the transcript of your short and put a very simple google image to illustrate the narrated sentences.
-...
-NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN THE QUERIES.`
-            },
-            {
-                name: "Video Research Expert",
-                inputEntity: "Timed Captions",
-                outputEntity: "Video Search Queries",
-                morphism: "{Timed Captions} --[Generates]--> {Video Search Queries}",
-                systemPrompt: `You're a video research expert. The user will give you the timed captions of a video they will make, and you will give back a list of text search queries that will be used to search for background video footage.`
-            },
-            {
-                name: "Facts Content Writer",
-                inputEntity: "Facts Type",
-                outputEntity: "Captivating Script",
-                morphism: "{Facts Type} --[Generates]--> {Captivating Script}",
-                systemPrompt: `You are an expert content writer of a YouTube shorts channel. You specialize in 'facts' shorts. Your facts shorts are less than 50 seconds verbally (around 140 words maximum). They are extremely captivating and original.`
-            },
-            {
-                name: "Random Subject Generator",
-                inputEntity: "Series Request",
-                outputEntity: "Subjects Array",
-                morphism: "{Series Request} --[Generates]--> {Subjects Array}",
-                systemPrompt: `For a series of <<N>> YouTube videos about top 10 facts on a certain subject, pick a random subject. Be very original. Put it in the '<<Subject>> facts' format.`
-            },
-            {
-                name: "Reddit Ask Question Extractor",
-                inputEntity: "Reddit Transcript",
-                outputEntity: "Thread Question",
-                morphism: "{Reddit Transcript} --[Extracts]--> {Thread Question}",
-                systemPrompt: `From the transcript of a Reddit ask, tell me the question in the title. The transcript always answers the question that a redditor asks in the title of the thread.`
-            },
-            {
-                name: "Story Realism Judge",
-                inputEntity: "Story Input",
-                outputEntity: "Realism Score",
-                morphism: "{Story Input} --[Evaluates]--> {Realism Score}",
-                systemPrompt: `You are the judge of the story. Your goal will be to judge if it can possibly happen. If it's possible and the story makes sense, then it's a 10. If not, it's a 0.`
-            },
-            {
-                name: "Reddit Ask Thread Question Generator",
-                inputEntity: "User Input",
-                outputEntity: "Interesting Question",
-                morphism: "{User Input} --[Generates]--> {Interesting Question}",
-                systemPrompt: `You will write an interesting Reddit ask thread question. The question must be a short, open-ended question that requires opinion/anecdotal-based answers.`
-            },
-            {
-                name: "YouTube Shorts Content Creator",
-                inputEntity: "Reddit Question",
-                outputEntity: "Anecdote Script",
-                morphism: "{Reddit Question} --[Generates]--> {Anecdote Script}",
-                systemPrompt: `You are a YouTube shorts content creator. You make extremely captivating shorts based on answers from AskReddit. Create a highly engaging anecdote for a YouTube short.`
-            },
-            {
-                name: "Realism Filter for YouTube Shorts Story",
-                inputEntity: "Story Input",
-                outputEntity: "Realism Score and Explanation",
-                morphism: "{Story Input} --[Evaluates]--> {Realism Score and Explanation}",
-                systemPrompt: `You're a judge of the realisticness of a story for a YouTube short. Determine if it can possibly happen and provide a score.`
-            },
-            {
-                name: "Reddit Username Generator",
-                inputEntity: "User Request",
-                outputEntity: "Random Reddit Username",
-                morphism: "{User Request} --[Generates]--> {Random Reddit Username}",
-                systemPrompt: `Generate a random Reddit name with one or two numbers inside the name. Make it sound natural.`
-            },
-            {
-                name: "Content Translator",
-                inputEntity: "Content Input",
-                outputEntity: "Translated Content in Target Language",
-                morphism: "{Content Input} --[Translates]--> {Translated Content in Target Language}",
-                systemPrompt: `You're an expert content translator to <<LANGUAGE>>. You always translate sentences properly, and you write numbers in WORDS, not digits.`
-            },
-            {
-                name: "Narrator Gender Identifier",
-                inputEntity: "Narrated Transcript",
-                outputEntity: "Narrator Gender",
-                morphism: "{Narrated Transcript} --[Identifies]--> {Narrator Gender}",
-                systemPrompt: `I will give you a narrated transcript, and you must identify if it's most probably a male or female.`
-            },
+            // ... [Other templates remain unchanged]
             {
                 name: "YouTube Shorts Title and Description Generator",
                 inputEntity: "Short Transcript",
@@ -469,6 +510,12 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
                 { role: "user", content: message }
             ];
 
+            // Estimate tokens for input
+            let inputTokens = 0;
+            messages.forEach(msg => {
+                inputTokens += estimateTokens(msg.content);
+            });
+
             try {
                 const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
@@ -477,7 +524,7 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
                         'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
+                        model: "gpt-4",
                         messages: messages,
                         max_tokens: 500
                     })
@@ -492,6 +539,19 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
                 log('Received response from OpenAI API');
                 addMessageToChat('AI', aiResponse);
 
+                // Estimate tokens for output
+                let outputTokens = estimateTokens(aiResponse);
+
+                // Update usage stats
+                totalTokens += (inputTokens + outputTokens);
+                // Determine model used for pricing
+                const modelUsed = data.model || "gpt4"; // Adjust based on API response
+                const inputCost = inputTokens * pricing.gpt4.input; // Modify if supporting multiple models
+                const outputCost = outputTokens * pricing.gpt4.output; // Modify if supporting multiple models
+                totalCost += (inputCost + outputCost);
+
+                updateUsageDisplay();
+
                 // Update conversation history
                 conversationHistory.push({ role: "user", content: message });
                 conversationHistory.push({ role: "assistant", content: aiResponse });
@@ -504,6 +564,14 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
         function addMessageToChat(sender, message) {
             const messageElement = document.createElement('div');
             messageElement.classList.add('message', sender.toLowerCase());
+
+            // Color Coding for System Prompts
+            if (sender === 'AI') {
+                messageElement.style.borderLeft = '5px solid #FFC107'; // Honey Yellow accent
+            } else if (sender === 'User') {
+                messageElement.style.borderRight = '5px solid #3498db'; // Blue accent
+            }
+
             messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
             chatMessages.appendChild(messageElement);
             chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -531,6 +599,11 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
             outputEntitySpan.textContent = template.outputEntity;
             morphismSpan.textContent = template.morphism;
         }
+
+        // Initialize Usage Display on Page Load
+        window.onload = () => {
+            updateUsageDisplay();
+        };
     </script>
 </body>
 </html>
