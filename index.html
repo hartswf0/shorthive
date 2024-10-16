@@ -636,7 +636,11 @@ NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN T
 
         function addMessageToChat(sender, message) {
             const messageElement = document.createElement('div');
-            messageElement.classList.add('message', sender.toLowerCase());
+            messageElement.classList.add('message');
+
+            // Sanitize sender name for class (replace spaces with hyphens and convert to lowercase)
+            const senderClass = sender.toLowerCase().replace(/\s+/g, '-');
+            messageElement.classList.add(senderClass);
 
             messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
             chatMessages.appendChild(messageElement);
