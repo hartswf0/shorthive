@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Chatbot with System Prompt Selection</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4e3c3;
+            color: #333;
+            line-height: 1.6;
+            font-size: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        /* Headings */
+        h1, h2 {
+            font-family: 'Impact', sans-serif;
+            color: #ff4d00;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+        h1 {
+            font-size: 32px;
+            border-bottom: 2px solid #ff4d00;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            font-size: 24px;
+            background-color: rgba(211, 211, 211, 0.3);
+            padding: 10px 20px;
+            position: relative;
+            margin-top: 20px;
+        }
+        h2::before {
+            content: '🤖';
+            position: absolute;
+            left: -35px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        /* Input Fields and Buttons */
+        input[type="password"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #d4c4a8;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff4d00;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #e04300;
+        }
+        /* Chat Container */
+        #chat-container {
+            border: 1px solid #d4c4a8;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            padding: 15px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        /* Copy Button for Chat */
+        #chat-messages .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+        #chat-messages .copy-button:hover {
+            background-color: #2980b9;
+        }
+        /* Messages */
+        .message {
+            margin-bottom: 15px;
+        }
+        .message strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .message.user {
+            text-align: right;
+        }
+        .message.ai {
+            text-align: left;
+        }
+        /* User Input */
+        #user-input {
+            display: flex;
+            gap: 10px;
+        }
+        #user-input input {
+            flex-grow: 1;
+        }
+        /* Console Output */
+        #console-output {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            height: 100px;
+            overflow-y: auto;
+            border-radius: 5px;
+            position: relative;
+        }
+        /* Copy Button for Console */
+        #console-output .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+        #console-output .copy-button:hover {
+            background-color: #2980b9;
+        }
+        /* System Prompt Details */
+        #prompt-details {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #d4c4a8;
+            border-radius: 5px;
+        }
+        #prompt-details h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        #prompt-details p {
+            margin-bottom: 10px;
+        }
+        /* About Section */
+        .about {
+            background-color: #e3d5b6;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .about a {
+            color: #ff4d00;
+            text-decoration: none;
+        }
+        .about a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI Chatbot</h1>
+        <!-- API Key Input -->
+        <input type="password" id="api-key-input" placeholder="Enter your OpenAI API key">
+        <button id="test-api-key">Test API Key</button>
+        <!-- System Prompt Selection -->
+        <select id="system-prompt-select">
+            <option value="">Select a System Prompt</option>
+        </select>
+        <!-- System Prompt Details -->
+        <div id="prompt-details">
+            <h3>System Prompt Details</h3>
+            <p><strong>Input Entity:</strong> <span id="input-entity">N/A</span></p>
+            <p><strong>Output Entity:</strong> <span id="output-entity">N/A</span></p>
+            <p><strong>Morphism:</strong> <span id="morphism">N/A</span></p>
+        </div>
+        <!-- Chat Container -->
+        <div id="chat-container">
+            <div id="chat-messages">
+                <button class="copy-button" id="copy-chat">Copy</button>
+                <!-- Chat messages will appear here -->
+            </div>
+            <div id="user-input">
+                <input type="text" id="message-input" placeholder="Type your message...">
+                <button id="send-button">Send</button>
+            </div>
+        </div>
+        <!-- Console Output -->
+        <div id="console-output">
+            <button class="copy-button" id="copy-console">Copy</button>
+        </div>
+        <!-- About Section -->
+        <div class="about">
+            <h2>How It Works</h2>
+            <p>This chatbot allows you to select different system prompts to interact with. Follow these steps:</p>
+            <ul>
+                <li><strong>Enter API Key:</strong> Provide your OpenAI API key in the input field above.</li>
+                <li><strong>Test API Key:</strong> Click "Test API Key" to verify its validity.</li>
+                <li><strong>Select System Prompt:</strong> Choose a desired system prompt from the dropdown menu.</li>
+                <li><strong>Start Chatting:</strong> Type your message and click "Send" or press Enter to communicate with the AI.</li>
+                <li><strong>View Prompt Details:</strong> See the expected input and output entities along with their relationship.</li>
+                <li><strong>Copy Output:</strong> Use the "Copy" buttons to copy chat messages or console logs.</li>
+            </ul>
+            <p>Your API key is never stored or shared. It's used solely for making requests to the OpenAI API.</p>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const testApiKeyButton = document.getElementById('test-api-key');
+        const consoleOutput = document.getElementById('console-output');
+        const copyConsoleButton = document.getElementById('copy-console');
+        const copyChatButton = document.getElementById('copy-chat');
+        const systemPromptSelect = document.getElementById('system-prompt-select');
+        const inputEntitySpan = document.getElementById('input-entity');
+        const outputEntitySpan = document.getElementById('output-entity');
+        const morphismSpan = document.getElementById('morphism');
+        const promptDetails = document.getElementById('prompt-details');
+
+        // Templates Array
+        const templates = [
+            {
+                name: "Expert Video Script Writer",
+                inputEntity: "User Corrections",
+                outputEntity: "Edited Script",
+                morphism: "{User Corrections} --[Transforms]--> {Edited Script}",
+                systemPrompt: `You are an expert video script writer/editor. You ONLY write text that is read. You only write the script that will be read by a voice actor for a video. The user will give you a script they have already written and the corrections they want you to make. From that, you will edit the script. Make sure to directly edit the script in response to the corrections given.
+Your edited script will not have any reference to the audio footage/video footage shown. Only the text that will be narrated by the voice actor.
+You will edit purely text.
+Don't write any other textual thing than the text itself.
+Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
+            },
+            {
+                name: "Expert Video Writer",
+                inputEntity: "Video Description",
+                outputEntity: "Video Script",
+                morphism: "{Video Description} --[Generates]--> {Video Script}",
+                systemPrompt: `You are an expert video writer. You ONLY produce text that is read. You only produce the script that will be read by a voice actor for a video. The user will give you the description of the video they want you to make and from that, you will write the script. Make sure to directly write the script in response to the video description.
+Your script will not have any reference to the audio footage/video footage shown. Only the text that will be narrated by the voice actor.
+You will produce purely text.
+Don't write any other textual thing than the text itself.
+Make sure the text is not longer than 200 words (keep the video pretty short and neat).`
+            },
+            {
+                name: "Shorts Video Editor",
+                inputEntity: "Transcript",
+                outputEntity: "Image Queries",
+                morphism: "{Transcript} --[Generates]--> {Image Queries}",
+                systemPrompt: `You are a shorts video editor. Your audience is people from 18 yo to 40yo. Your style of editing is pretty simple, you take the transcript of your short and put a very simple google image to illustrate the narrated sentences.
+...
+NEVER USE ABSTRACT NOUNS IN THE QUERIES. ALWAYS USE REAL OBJECTS OR PERSONS IN THE QUERIES.`
+            },
+            {
+                name: "Video Research Expert",
+                inputEntity: "Timed Captions",
+                outputEntity: "Video Search Queries",
+                morphism: "{Timed Captions} --[Generates]--> {Video Search Queries}",
+                systemPrompt: `You're a video research expert. The user will give you the timed captions of a video they will make, and you will give back a list of text search queries that will be used to search for background video footage.`
+            },
+            {
+                name: "Facts Content Writer",
+                inputEntity: "Facts Type",
+                outputEntity: "Captivating Script",
+                morphism: "{Facts Type} --[Generates]--> {Captivating Script}",
+                systemPrompt: `You are an expert content writer of a YouTube shorts channel. You specialize in 'facts' shorts. Your facts shorts are less than 50 seconds verbally (around 140 words maximum). They are extremely captivating and original.`
+            },
+            {
+                name: "Random Subject Generator",
+                inputEntity: "Series Request",
+                outputEntity: "Subjects Array",
+                morphism: "{Series Request} --[Generates]--> {Subjects Array}",
+                systemPrompt: `For a series of <<N>> YouTube videos about top 10 facts on a certain subject, pick a random subject. Be very original. Put it in the '<<Subject>> facts' format.`
+            },
+            {
+                name: "Reddit Ask Question Extractor",
+                inputEntity: "Reddit Transcript",
+                outputEntity: "Thread Question",
+                morphism: "{Reddit Transcript} --[Extracts]--> {Thread Question}",
+                systemPrompt: `From the transcript of a Reddit ask, tell me the question in the title. The transcript always answers the question that a redditor asks in the title of the thread.`
+            },
+            {
+                name: "Story Realism Judge",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score}",
+                systemPrompt: `You are the judge of the story. Your goal will be to judge if it can possibly happen. If it's possible and the story makes sense, then it's a 10. If not, it's a 0.`
+            },
+            {
+                name: "Reddit Ask Thread Question Generator",
+                inputEntity: "User Input",
+                outputEntity: "Interesting Question",
+                morphism: "{User Input} --[Generates]--> {Interesting Question}",
+                systemPrompt: `You will write an interesting Reddit ask thread question. The question must be a short, open-ended question that requires opinion/anecdotal-based answers.`
+            },
+            {
+                name: "YouTube Shorts Content Creator",
+                inputEntity: "Reddit Question",
+                outputEntity: "Anecdote Script",
+                morphism: "{Reddit Question} --[Generates]--> {Anecdote Script}",
+                systemPrompt: `You are a YouTube shorts content creator. You make extremely captivating shorts based on answers from AskReddit. Create a highly engaging anecdote for a YouTube short.`
+            },
+            {
+                name: "Realism Filter for YouTube Shorts Story",
+                inputEntity: "Story Input",
+                outputEntity: "Realism Score and Explanation",
+                morphism: "{Story Input} --[Evaluates]--> {Realism Score and Explanation}",
+                systemPrompt: `You're a judge of the realisticness of a story for a YouTube short. Determine if it can possibly happen and provide a score.`
+            },
+            {
+                name: "Reddit Username Generator",
+                inputEntity: "User Request",
+                outputEntity: "Random Reddit Username",
+                morphism: "{User Request} --[Generates]--> {Random Reddit Username}",
+                systemPrompt: `Generate a random Reddit name with one or two numbers inside the name. Make it sound natural.`
+            },
+            {
+                name: "Content Translator",
+                inputEntity: "Content Input",
+                outputEntity: "Translated Content in Target Language",
+                morphism: "{Content Input} --[Translates]--> {Translated Content in Target Language}",
+                systemPrompt: `You're an expert content translator to <<LANGUAGE>>. You always translate sentences properly, and you write numbers in WORDS, not digits.`
+            },
+            {
+                name: "Narrator Gender Identifier",
+                inputEntity: "Narrated Transcript",
+                outputEntity: "Narrator Gender",
+                morphism: "{Narrated Transcript} --[Identifies]--> {Narrator Gender}",
+                systemPrompt: `I will give you a narrated transcript, and you must identify if it's most probably a male or female.`
+            },
+            {
+                name: "YouTube Shorts Title and Description Generator",
+                inputEntity: "Short Transcript",
+                outputEntity: "Title and Description in JSON",
+                morphism: "{Short Transcript} --[Generates]--> {Title and Description in JSON}",
+                systemPrompt: `You are a YouTube shorts title and description expert writer. Create a catchy title and a short description based on the provided transcript.`
+            }
+        ];
+
+        // Populate System Prompt Dropdown
+        templates.forEach((template, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = template.name;
+            systemPromptSelect.appendChild(option);
+        });
+
+        // Event Listeners
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        testApiKeyButton.addEventListener('click', testApiKey);
+        copyConsoleButton.addEventListener('click', () => copyToClipboard(consoleOutput.textContent));
+        copyChatButton.addEventListener('click', () => copyToClipboard(chatMessages.innerText));
+
+        systemPromptSelect.addEventListener('change', displayPromptDetails);
+
+        // Utility Functions
+        function log(message) {
+            console.log(message);
+            consoleOutput.textContent += message + '\n';
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        async function testApiKey() {
+            const apiKey = apiKeyInput.value.trim();
+            if (!apiKey) {
+                log('Please enter an API key.');
+                return;
+            }
+
+            log('Testing API key...');
+            try {
+                const response = await fetch('https://api.openai.com/v1/models', {
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`
+                    }
+                });
+
+                if (response.ok) {
+                    log('API key is valid!');
+                } else {
+                    log('API key is invalid. Please check and try again.');
+                }
+            } catch (error) {
+                log(`Error testing API key: ${error.message}`);
+            }
+        }
+
+        let conversationHistory = [];
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            const apiKey = apiKeyInput.value.trim();
+            const selectedPromptIndex = systemPromptSelect.value;
+
+            if (!message) return;
+            if (!apiKey) {
+                log('Please enter an API key before sending a message.');
+                return;
+            }
+            if (selectedPromptIndex === "") {
+                log('Please select a system prompt.');
+                return;
+            }
+
+            const systemPrompt = templates[selectedPromptIndex].systemPrompt;
+
+            addMessageToChat('User', message);
+            messageInput.value = '';
+
+            log('Sending message to OpenAI API...');
+
+            // Build the conversation messages
+            let messages = [
+                { role: "system", content: systemPrompt },
+                ...conversationHistory,
+                { role: "user", content: message }
+            ];
+
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: messages,
+                        max_tokens: 500
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content.trim();
+                log('Received response from OpenAI API');
+                addMessageToChat('AI', aiResponse);
+
+                // Update conversation history
+                conversationHistory.push({ role: "user", content: message });
+                conversationHistory.push({ role: "assistant", content: aiResponse });
+            } catch (error) {
+                log(`Error: ${error.message}`);
+                addMessageToChat('AI', 'Sorry, there was an error processing your request.');
+            }
+        }
+
+        function addMessageToChat(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', sender.toLowerCase());
+            messageElement.innerHTML = `<strong>${sender}:</strong> ${message}`;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Content copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy content.');
+                console.error('Error copying to clipboard:', err);
+            });
+        }
+
+        function displayPromptDetails() {
+            const selectedIndex = systemPromptSelect.value;
+            if (selectedIndex === "") {
+                inputEntitySpan.textContent = "N/A";
+                outputEntitySpan.textContent = "N/A";
+                morphismSpan.textContent = "N/A";
+                return;
+            }
+            const template = templates[selectedIndex];
+            inputEntitySpan.textContent = template.inputEntity;
+            outputEntitySpan.textContent = template.outputEntity;
+            morphismSpan.textContent = template.morphism;
+        }
+    </script>
+</body>
+</html>
