@@ -10,8 +10,6 @@
 
 **ShortHive** serves as a comprehensive teaching resource for Georgia Tech's undergraduate course on computational media. It emphasizes the interplay between system prompts and prompt architecture, providing foundational knowledge in **Prompt Engineering 101**. Students can understand and manipulate how different system prompts interact within a multi-agent system, fostering a **growth mindset** and embracing the **feeling of groundlessness** inherent in cutting-edge technology.
 
-*ShortHive: A clever riff on leveraging GPT for multi-agent, short-form content creation, embodying the essence of collaborative and impactful media production.*
-
 ---
 
 ## **Course Integration**
