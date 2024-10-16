@@ -1,6 +1,6 @@
 # ShortHive: Multi-Agent AI Video Automation Framework
 
-![ShortHive Logo](https://github.com/yourusername/ShortHive/raw/main/shorthive_logo_1.png)
+![ShortHive Logo](shorthive_logo_1.png)
 
 ## **Overview**
 
