@@ -115,6 +115,18 @@
             padding: 10px 15px;
             font-size: 14px;
         }
+        /* Demo Buttons */
+        .demo-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            align-items: center;
+        }
+        .demo-buttons button {
+            width: 80%;
+            max-width: 300px;
+        }
         /* Chat Container */
         #chat-container {
             border: 2px solid #E0E0E0; /* Softer borders for a clean look */
@@ -313,6 +325,16 @@
             #dashboard {
                 flex-direction: column;
             }
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .demo-buttons {
+                width: 100%;
+            }
+            .demo-buttons button {
+                width: 100%;
+            }
         }
     </style>
     <!-- Optional: Include GPT-3 Encoder for Accurate Token Counting -->
@@ -327,6 +349,17 @@
             <button onclick="location.href='fourcompare.html'">Compare</button>
             <button onclick="location.href='simple.html'">Simple</button>
             <button onclick="location.href='tradeoffs.html'">Tradeoffs</button>
+            <button onclick="location.href='reference.html'">Reference</button>
+        </div>
+        
+        <!-- Demo Sections -->
+        <div class="demo-buttons">
+            <!-- Simple Demo -->
+            <button onclick="window.open('https://hartswf0.github.io/simple-ai-chatbot/', '_blank')">🔍 Simple AI Chatbot Demo</button>
+            <!-- Node.js Demo -->
+            <button onclick="window.open('https://ai-etch-a-sketch.glitch.me/', '_blank')">🖥️ Node.js Etch A Sketch Demo</button>
+            <!-- Gradio Demo -->
+            <button onclick="window.open('https://huggingface.co/spaces/cool-radio/Centaur_Box_Experiment', '_blank')">🎛️ Gradio Centaur Box Experiment</button>
         </div>
         
         <!-- Logline -->
