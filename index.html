@@ -103,6 +103,18 @@
             background-color: #e0a500; /* Slight tone change for hover */
             transform: scale(1.02); /* Slight scaling for playful effect */
         }
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .navigation-buttons button {
+            width: auto;
+            padding: 10px 15px;
+            font-size: 14px;
+        }
         /* Chat Container */
         #chat-container {
             border: 2px solid #E0E0E0; /* Softer borders for a clean look */
@@ -309,6 +321,14 @@
 <body>
     <div class="container">
         <h1>ShortHive</h1>
+        
+        <!-- Navigation Buttons -->
+        <div class="navigation-buttons">
+            <button onclick="location.href='fourcompare.html'">Compare</button>
+            <button onclick="location.href='simple.html'">Simple</button>
+            <button onclick="location.href='tradeoffs.html'">Tradeoffs</button>
+        </div>
+        
         <!-- Logline -->
         <div class="logline">
             Automate Your AI Video Workflow with ShortHive.
